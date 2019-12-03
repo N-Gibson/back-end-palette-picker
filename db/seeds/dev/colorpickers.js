@@ -1,11 +1,13 @@
-
+const projectsData = require('../../../data/projectData');
+const palettesData = require('../../../data/paletteData');
+console.log(projectsData)
 
 const createProject = (knex, project) => {
   return knex('projects').insert({
     id: project.id,
     name: project.name
-  })
-}
+  });
+};
 
 const createPalette = (knex, palette) => {
   return knex('palettes').insert({
@@ -17,8 +19,8 @@ const createPalette = (knex, palette) => {
     color3: palette.color3,
     color4: palette.color4,
     color5: palette.color5
-  })
-}
+  });
+};
 
 exports.seed = (knex) => {
   return knex('palettes').del()
@@ -39,7 +41,7 @@ exports.seed = (knex) => {
       return Promise.all(palettesPromise);
     })
     .catch(error => console.error(`Error seeding data: ${error}`));
-}
+};
 
 
 
