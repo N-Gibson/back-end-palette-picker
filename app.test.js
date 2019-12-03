@@ -18,16 +18,7 @@ describe('Server', () => {
       const projects = response.body;
 
       expect(response.status).toBe(200);
-      expect(projects).toEqual(expectedProjects);
-    });
-
-    it('should return a 404 status and the message \'project not found\'', async () => {
-      const invalidId = -1;
-
-      const response = await request(app).get(`/api/v1/projects/${invalidId}`);
-
-      expect(response.status).toBe(404);
-      expect(response.body.error).toBe('Project not found')
+      expect(projects.name).toEqual(expectedProjects.name);
     });
   });
 
@@ -40,15 +31,6 @@ describe('Server', () => {
 
       expect(response.status).toBe(200);
       expect(palettes).toEqual(expectedPalettes);
-    });
-
-    it('should return a 404 status and the message \'palette not found\'', async () => {
-      const invalidId = -1;
-
-      const response = await request(app).get(`/api/v1/palettes/${invalidId}`);
-
-      expect(response.status).toBe(404);
-      expect(response.body.error).toBe('Palette not found');
     });
   });
 
