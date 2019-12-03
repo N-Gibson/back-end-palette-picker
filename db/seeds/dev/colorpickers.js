@@ -1,6 +1,5 @@
 const projectsData = require('../../../data/projectData');
 const palettesData = require('../../../data/paletteData');
-console.log(projectsData)
 
 const createProject = (knex, project) => {
   return knex('projects').insert({
