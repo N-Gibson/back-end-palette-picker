@@ -8,7 +8,6 @@ const database = require('knex')(configuration);
 
 app.locals.title = 'colorpicker';
 app.use(cors());
-// Can pass options 
 app.use(express.json());
 
 app.get('/api/v1/projects', (request, response) => {
