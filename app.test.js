@@ -120,15 +120,16 @@ describe('Server', () => {
     })
   });
 
-  describe('PATCH /api/v1/projects', () => {
-    it('should return a 200 status and return the modified project', async () => {
-      const prePatchProject = database('projects').select().first();
+  describe('PATCH /api/v1/projects/:id', () => {
+    it('should return a 202 status and return the modified project', async () => {
+      const prePatchProject = await database('projects').select().first();
 
       expect(prePatchProject.name).toEqual('Project Name 1')
-      const postPatchProject = {name: 'Very New Name'}
-      const project = await request(app).patch('/api/v1/projects').send(postPatchProject)
 
-      expect(response.status).toBe(200);
+      const postPatchProject = {name: 'Very New Name'}
+      const project = await request(app).patch('/api/v1/projects/1').send(postPatchProject)
+
+      expect(project.status).toBe(202);
       expect(postPatchProject.name).toEqual('Very New Name')
     })
   })
