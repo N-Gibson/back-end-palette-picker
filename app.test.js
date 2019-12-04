@@ -128,9 +128,10 @@ describe('Server', () => {
 
       const postPatchProject = {name: 'Very New Name'}
       const project = await request(app).patch('/api/v1/projects/1').send(postPatchProject)
+      const project1 = await database('projects').select()
 
       expect(project.status).toBe(202);
-      expect(postPatchProject.name).toEqual('Very New Name')
+      expect(postPatchProject.name).toEqual(project1[2].name)
     })
   })
 
@@ -140,7 +141,9 @@ describe('Server', () => {
 
       expect(prePatchPalette.name).toEqual('Palette Name 1')
 
-      const postPatchPalette = {name: 'Very New Name'}
+      const postPatchPalette = {
+        name: 'Very New Name',
+      }
       const project = await request(app).patch('/api/v1/palettes/1').send(postPatchPalette)
 
       expect(project.status).toBe(202);

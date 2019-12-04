@@ -123,6 +123,24 @@ app.patch('/api/v1/projects/:id', (request, response) => {
   }
 });
 
+app.patch('/api/v1/palettes/:id', (request, response) => {
+  const { id } = request.params;
+  for (let requiredParameter of ['name']) {
+    if (!request.body[requiredParameter]) {
+      return response.status(422).send({
+        error: `Expected format { name: <String>. You are missing a ${requiredParameter} property}`
+      });
+    }
+    database('palettes')
+      .where('id', request.params.id)
+      .update({ ...request.body })
+      .then(() =>
+        response.status(202).json({ id: id})
+      )
+      .catch(error => response.status(500).json({ error }));
+  }
+});
+
 
 
 module.exports = app;
