@@ -63,7 +63,7 @@ describe('Server', () => {
 
       const response = await request(app).get(`/api/v1/palettes/${id}`);
       const result = response.body[0];
-      
+
       expect(response.status).toBe(200);
       expect(result.name).toEqual(expectedPalette.name);
     });
@@ -77,4 +77,17 @@ describe('Server', () => {
       expect(response.body.error).toEqual('Palette not found');
     });
   });
+
+  describe('POST /api/v1/projects', () => {
+    it('should return a 201 and add a new student to the database', async () => {
+      const newProject = { name: 'New Project' }
+
+      const response = await request(app).post('/api/v1/projects').send(newProject);
+      const projects = await database('projects').where('id', response.body.id).select();
+      const project = projects[0];
+
+      expect(response.status).toBe(201);
+      expect(project.name).toBe(newProject.name);
+    })
+  })
 });
