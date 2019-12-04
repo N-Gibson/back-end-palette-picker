@@ -63,7 +63,7 @@ describe('Server', () => {
 
       const response = await request(app).get(`/api/v1/palettes/${id}`);
       const result = response.body[0];
-      
+
       expect(response.status).toBe(200);
       expect(result.name).toEqual(expectedPalette.name);
     });
@@ -77,4 +77,59 @@ describe('Server', () => {
       expect(response.body.error).toEqual('Palette not found');
     });
   });
-});
+
+  describe('POST /api/v1/projects', () => {
+    it('should return a 201 status and add a new project to the database', async () => {
+      const newProject = { name: 'New Project' }
+
+      const response = await request(app).post('/api/v1/projects').send(newProject);
+      const projects = await database('projects').where('id', response.body.id).select();
+      const project = projects[0];
+
+      expect(response.status).toBe(201);
+      expect(project.name).toBe(newProject.name);
+    });
+
+    it('should return a 422 status and the message \'A message that is bad\'', async () => {
+      const invalidOptions = { nothing: 'here'};
+
+      const response = await request(app).post('/api/v1/projects').send(invalidOptions);
+
+      expect(response.status).toBe(422);
+    })
+  });
+
+  describe('POST /api/v1/palettes', () => {
+    it('should return a 201 status and add a new palette to the database', async () => {
+      const newPalette = { project_id: 1,  name: 'New Palette', color1: '#123456', color2: '#987654', color3: '#345678', color4: '#876543', color5: '#102938'}
+ 
+      const response = await request(app).post('/api/v1/palettes').send(newPalette);
+      const palettes = await database('palettes').where('id', response.body.project_id).select();
+      const palette = palettes[0];
+
+      expect(response.status).toBe(201);
+      expect(palette.name).toBe(newPalette.name);
+    });
+
+    it('should return a 422 status and the message \'A message that is also bad\'', async () => {
+     const invalidOptions = { nothing: 'here'};
+
+      const response = await request(app).post('/api/v1/projects').send(invalidOptions);
+
+      expect(response.status).toBe(422);
+    })
+  });
+
+  describe('PATCH /api/v1/projects', () => {
+    it('should return a 200 status and return the modified project', async () => {
+      const prePatchProject = database('projects').select().first();
+
+      expect(prePatchProject.name).toEqual('Project Name 1')
+      const postPatchProject = {name: 'Very New Name'}
+      const project = await request(app).patch('/api/v1/projects').send(postPatchProject)
+
+      expect(response.status).toBe(200);
+      expect(postPatchProject.name).toEqual('Very New Name')
+    })
+  })
+}); 
