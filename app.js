@@ -64,4 +64,8 @@ app.get('/api/v1/palettes/:id', (request, response) => {
     })
 })
 
+app.post('/api/v1/projects', (request, response) => {
+  console.log(request)
+})
+
 module.exports = app;
