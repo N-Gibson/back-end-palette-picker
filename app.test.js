@@ -133,4 +133,18 @@ describe('Server', () => {
       expect(postPatchProject.name).toEqual('Very New Name')
     })
   })
+
+  describe('PATCH /api/v1/palettes/:id', () => {
+    it('should return a 202 status and return the modified palette', async () => {
+      const prePatchPalette = await database('palettes').select().first();
+
+      expect(prePatchPalette.name).toEqual('Palette Name 1')
+
+      const postPatchPalette = {name: 'Very New Name'}
+      const project = await request(app).patch('/api/v1/palettes/1').send(postPatchPalette)
+
+      expect(project.status).toBe(202);
+      expect(postPatchPalette.name).toEqual('Very New Name')
+    })
+  })
 }); 
