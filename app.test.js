@@ -30,7 +30,7 @@ describe('Server', () => {
       const palettes = response.body;
 
       expect(response.status).toBe(200);
-      expect(palettes).toEqual(expectedPalettes);
+      expect(palettes.name).toEqual(expectedPalettes.name);
     });
   });
 
@@ -43,7 +43,7 @@ describe('Server', () => {
       const result = response.body[0];
 
       expect(response.status).toBe(200);
-      expect(result).toEqual(expectedProject);
+      expect(result.name).toEqual(expectedProject.name);
     });
 
     it('should return a 404 status and the message \'Project not found\'', async () => {
@@ -62,10 +62,10 @@ describe('Server', () => {
       const { id } = expectedPalette;
 
       const response = await request(app).get(`/api/v1/palettes/${id}`);
-      const result = response.body;
-
+      const result = response.body[0];
+      
       expect(response.status).toBe(200);
-      expect(result).toEqual(expectedPalette);
+      expect(result.name).toEqual(expectedPalette.name);
     });
 
     it('should return a 404 status and the message \'Palette not found\'', async () => {
