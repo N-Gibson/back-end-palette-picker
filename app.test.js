@@ -79,7 +79,7 @@ describe('Server', () => {
   });
 
   describe('POST /api/v1/projects', () => {
-    it('should return a 201 and add a new student to the database', async () => {
+    it('should return a 201 status and add a new project to the database', async () => {
       const newProject = { name: 'New Project' }
 
       const response = await request(app).post('/api/v1/projects').send(newProject);
@@ -88,6 +88,32 @@ describe('Server', () => {
 
       expect(response.status).toBe(201);
       expect(project.name).toBe(newProject.name);
+    });
+
+    it('should return a 422 status and the message \'A message that is bad\'', () => {
+      const invalidOptions = { nothing: 'here'};
+
+      // Need to review here 
     })
-  })
+  });
+
+  describe('POST /api/v1/palettes', () => {
+    it('should return a 201 status and add a new palette to the database', async () => {
+      const newPalette = { id: 1, project_id: 1,  name: 'New Palette', color1: '#123456', color2: '#987654', color3: '#345678', color4: '#876543', color5: '#102938'}
+      // what ids need to be in the testing suite as one is made dynamically and the other is associated with another table?
+
+      const response = await request(app).post('/api/v1/palettes').send(newPalette);
+      const palettes = await database('palettes').where('id', response.body.id).select();
+      const palette = palettes[0];
+
+      expect(response.status).toBe(201);
+      expect(palette.name).toBe(newPalette.name);
+    });
+
+    it('should return a 422 status and the message \'A message that is also bad\'', () => {
+      const invalidOptions = 'I think this is how to go about testing this?'
+
+      // Need to review here 
+    })
+  });
 });
