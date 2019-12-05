@@ -235,4 +235,5 @@ describe('Server', () => {
         const response = await request(app).delete('/api/v1/projects/-10')
         expect(response.status).toBe(404)
     })
+  })
 }); 
