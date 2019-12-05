@@ -151,4 +151,17 @@ describe('Server', () => {
       expect(postPatchPalette.name).toEqual(palette1[2].name)
     })
   })
+
+  describe('DELETE /projects/:id', () => {
+    it('should return a 204 status code and remove project from database', async () => {
+        const deletedId = await database('projects').select().first().then(project => project.id)
+        const response = await request(app).delete(`/api/v1/projects/${deletedId}`)
+        expect(response.status).toBe(204)
+    })
+
+    it('should return a 404 if a request id is bad', async () => {
+        const response = await request(app).delete('/api/v1/projects/-10')
+        expect(response.status).toBe(404)
+    })
+})
 }); 
