@@ -144,10 +144,11 @@ describe('Server', () => {
       const postPatchPalette = {
         name: 'Very New Name',
       }
-      const project = await request(app).patch('/api/v1/palettes/1').send(postPatchPalette)
+      const palette = await request(app).patch('/api/v1/palettes/1').send(postPatchPalette)
+      const palette1 = await database('palettes').select()
 
-      expect(project.status).toBe(202);
-      expect(postPatchPalette.name).toEqual('Very New Name')
+      expect(palette.status).toBe(202);
+      expect(postPatchPalette.name).toEqual(palette1[2].name)
     })
   })
 }); 
