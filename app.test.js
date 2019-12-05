@@ -163,9 +163,10 @@ describe('Server', () => {
         name: 'Very New Name',
       }
       const palette = await request(app).patch('/api/v1/palettes/1').send(postPatchPalette)
+      const palette1 = await database('palettes').select()
 
       expect(palette.status).toBe(202);
-      expect(postPatchPalette.name).toEqual('Very New Name')
+      expect(postPatchPalette.name).toEqual(palette1[2].name)
     });
 
     it('should return a 422 status and the missing information from the body', async () => {
@@ -222,4 +223,16 @@ describe('Server', () => {
       expect(response.body).toBe('Could not find palette with the id of: -1');
     })
   })
+
+  describe('DELETE /projects/:id', () => {
+    it('should return a 204 status code and remove project from database', async () => {
+        const deletedId = await database('projects').select().first().then(project => project.id)
+        const response = await request(app).delete(`/api/v1/projects/${deletedId}`)
+        expect(response.status).toBe(204)
+    })
+
+    it('should return a 404 if a request id is bad', async () => {
+        const response = await request(app).delete('/api/v1/projects/-10')
+        expect(response.status).toBe(404)
+    })
 }); 
