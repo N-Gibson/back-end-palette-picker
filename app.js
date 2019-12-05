@@ -109,15 +109,19 @@ app.patch('/api/v1/projects/:id', (request, response) => {
   for (let requiredParameter of ['name']) {
     if (!request.body[requiredParameter]) {
       return response.status(422).send({
-        error: `Expected format { name: <String>. You are missing a ${requiredParameter} property}`
+        error: `Expected format { name: <String>. You are missing a ${requiredParameter} property }`
       });
     }
     database('projects')
       .where('id', request.params.id)
       .update({ ...request.body })
-      .then(() =>
-        response.status(202).json({ id: id})
-      )
+      .then(project => {
+        if(project.length) {
+          response.status(202).json({ id: id});
+        } else {
+          response.status(404).json(`No project with the id: ${id} found`);
+        }
+      })
       .catch(error => response.status(500).json({ error }));
   }
 });
@@ -127,15 +131,19 @@ app.patch('/api/v1/palettes/:id', (request, response) => {
   for (let requiredParameter of ['name']) {
     if (!request.body[requiredParameter]) {
       return response.status(422).send({
-        error: `Expected format { name: <String>. You are missing a ${requiredParameter} property}`
+        error: `Expected format { name: <String>. You are missing a ${requiredParameter} property }`
       });
     }
     database('palettes')
       .where('id', request.params.id)
       .update({ ...request.body })
-      .then(() =>
-        response.status(202).json({ id: id})
-      )
+      .then(palette => {
+        if(palette.length) {
+          response.status(202).json({ id: id});
+        } else {
+          response.status(404).json(`No palette with the id: ${id} found`);
+        }
+      })
       .catch(error => response.status(500).json({ error }));
   }
 });
@@ -161,6 +169,22 @@ app.delete('/api/v1/projects/:id', (request, response) => {
     });
 });
 
+app.delete('/api/v1/palettes/:id', (request, response) => {
+  const { id } = request.params;
+
+  database('palettes')
+    .where({ id: id })
+    .del()
+    .then(res => {
+      if(res) {
+        response.status(200).json(`Palette ${id} has been deleted`);
+      } else {
+        response.status(404).json(`Could not find palette with the id of: ${id}`);
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    })
+});
 
 module.exports = app;
-

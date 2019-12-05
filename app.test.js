@@ -132,8 +132,26 @@ describe('Server', () => {
 
       expect(project.status).toBe(202);
       expect(postPatchProject.name).toEqual(project1[2].name)
-    })
-  })
+    });
+
+    it('should return a 422 status and the missing information from the body', async () => {
+      const invalidParam = { nombre: 'Bob' };
+
+      const project = await request(app).patch('/api/v1/projects/1').send(invalidParam);
+
+      expect(project.status).toBe(422);
+      expect(project.body.error).toBe('Expected format { name: <String>. You are missing a name property }');
+    });
+
+    it('should return a 404 status and a message stating no project found', async () => {
+      const invalidId = -1;
+      const param = { name: 'Valid project name'}
+      const response = await request(app).patch(`/api/v1/projects/${invalidId}`).send(param);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(`No project with the id: ${invalidId} found`);
+    });
+  });
 
   describe('PATCH /api/v1/palettes/:id', () => {
     it('should return a 202 status and return the modified palette', async () => {
@@ -149,6 +167,60 @@ describe('Server', () => {
 
       expect(palette.status).toBe(202);
       expect(postPatchPalette.name).toEqual(palette1[2].name)
+    });
+
+    it('should return a 422 status and the missing information from the body', async () => {
+      const invalidParam = { nombre: 'Bob' };
+
+      const palette = await request(app).patch('/api/v1/palettes/1').send(invalidParam);
+
+      expect(palette.status).toBe(422);
+      expect(palette.body.error).toBe('Expected format { name: <String>. You are missing a name property }');
+    });
+
+    it('should return a 404 status and a message stating no palette found', async () => {
+      const invalidId = -1;
+      const param = { name: 'Valid project name'}
+      const response = await request(app).patch(`/api/v1/palettes/${invalidId}`).send(param);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual(`No palette with the id: ${invalidId} found`);
+    });
+  });
+
+  describe('DELETE /api/v1/palettes/:id', () => {
+    it('should return a 200 status code and the id of the deleted palette', async () => {
+      const palettes = await database('palettes').select();
+      const palette = palettes[0];
+      const paletteId = palette.id;
+
+      const response = await request(app).delete(`/api/v1/palettes/${paletteId}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(`Palette ${paletteId} has been deleted`);
+    });
+
+    it('should reduce the size of the database if the deletion was successful', async () => {
+      const palettes = await database('palettes').select();
+      const palette = palettes[0];
+      const paletteId = palette.id;
+
+      expect(palettes.length).toEqual(3);
+
+      const response = await request(app).delete(`/api/v1/palettes/${paletteId}`);
+
+      const deletedPalettes = await database('palettes').select();
+
+      expect(deletedPalettes.length).toEqual(2);
+    })
+
+    it('should return a 404 status code if there is no palette with the matching id and the corresponding error message', async () => {
+      const invalidId = -1;
+
+      const response = await request(app).delete(`/api/v1/palettes/${invalidId}`);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toBe('Could not find palette with the id of: -1');
     })
   })
 
@@ -163,5 +235,5 @@ describe('Server', () => {
         const response = await request(app).delete('/api/v1/projects/-10')
         expect(response.status).toBe(404)
     })
-})
+  })
 }); 
