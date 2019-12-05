@@ -153,13 +153,13 @@ describe('Server', () => {
   })
 
   describe('DELETE /projects/:id', () => {
-    it('should return a 204 status code and remove project from database', async () => {
+    it('should return a 204 status code and delete project with corresponding id', async () => {
         const deletedId = await database('projects').select().first().then(project => project.id)
         const response = await request(app).delete(`/api/v1/projects/${deletedId}`)
         expect(response.status).toBe(204)
     })
 
-    it('should return a 404 if a request id is bad', async () => {
+    it('should return a 404 status code if a request id is not found', async () => {
         const response = await request(app).delete('/api/v1/projects/-10')
         expect(response.status).toBe(404)
     })
