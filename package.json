@@ -7,9 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "jest server",
     "start": "node server.js",
-    "test:watch": "jest --watchAll"
+    "test": "jest --watchAll"
   },
   "repository": {
     "type": "git",
