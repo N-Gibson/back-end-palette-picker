@@ -4,6 +4,6 @@ node_js:
 services:
   - postgresql
 before_script:
-  - psql -c 'CREATE DATABASE palette_test;' -U postgres
+  - psql -c 'CREATE DATABASE colorpicker_test;' -U postgres
 notifications: 
   email: false
