@@ -7,7 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "jest server --forceExit",
+    "test": "jest server",
     "start": "node server.js",
     "test:watch": "jest --watchAll"
   },
