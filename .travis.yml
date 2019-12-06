@@ -6,6 +6,7 @@ services:
 before_script:
   - psql -c 'CREATE DATABASE colorpicker_test;' -U postgres
   - knex migrate:latest --env=test
+  - knex seed:run --env=test
 notifications: 
   email: false
 deploy: 
