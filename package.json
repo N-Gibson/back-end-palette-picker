@@ -7,8 +7,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "jest --watchAll --verbose",
-    "start": "node server.js"
+    "test": "jest server --forceExit",
+    "start": "node server.js",
+    "test:watch": "jest --watchAll"
   },
   "repository": {
     "type": "git",
