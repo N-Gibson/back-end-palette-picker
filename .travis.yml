@@ -8,3 +8,6 @@ before_script:
   - knex migrate:latest --env=test
 notifications: 
   email: false
+deploy: 
+  provider: heroku
+  
