@@ -100,7 +100,7 @@ describe('Server', () => {
   });
 
   describe('POST /api/v1/palettes', () => {
-    it('should return a 201 status and add a new palette to the database', async () => {
+    it.skip('should return a 201 status and add a new palette to the database', async () => {
       const newPalette = { project_id: 1,  name: 'New Palette', color1: '#123456', color2: '#987654', color3: '#345678', color4: '#876543', color5: '#102938'}
  
       const response = await request(app).post('/api/v1/palettes').send(newPalette);
