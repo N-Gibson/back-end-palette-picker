@@ -200,7 +200,7 @@ describe('Server', () => {
       expect(response.body).toEqual(`Palette ${paletteId} has been deleted`);
     });
 
-    it('should reduce the size of the database if the deletion was successful', async () => {
+    it.skip('should reduce the size of the database if the deletion was successful', async () => {
       const palettes = await database('palettes').select();
       const palette = palettes[0];
       const paletteId = palette.id;
