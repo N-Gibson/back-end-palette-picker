@@ -157,8 +157,8 @@ app.delete('api/v1/projects/:id', (request, response) => {
       database('projects')
       .where('id', id)
       .del()
-      .then(project => {
-        if(!project) {
+      .then(res => {
+        if(!res) {
           response.status(404).json(`No project with id: ${id} found`)
         } else {
           response.status(204).json(`Project with id: ${id} has been deleted.`)
