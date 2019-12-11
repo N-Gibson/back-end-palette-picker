@@ -148,21 +148,22 @@ app.patch('/api/v1/palettes/:id', (request, response) => {
   }
 });
 
-app.delete('/api/v1/projects/:projectId', (request, response) => {
-  database('projects').where('project_id', request.params.projectId).select().del()
-  .then(project => {
-      if (project) {
-      response.status(202).json(`Project ${request.params.projectId} deleted`);
-    } else {
-      response.status(404).json({ 
-        error: `Could not find project with id: ${request.params.projectId}`
-      })
-    }
-  })
-  .catch(error => {
-      response.status(500).json({ error });
-  })
-});
+app.delete('/api/v1/projects/:id', (request, response) => {
+  const { id } = request.params;
+  database('projects')
+    .where('id', id)
+    .del()
+    .then(project => {
+      if(!project) {
+        response.status(404).json(`Could not find project with id: ${id}`)
+      } else {
+        response.status(202).json('Project deleted successfully!')
+      }
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
 
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
