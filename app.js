@@ -183,7 +183,7 @@ app.delete('/api/v1/projects/:id', async (request, response) => {
         if(!response) {
           response.status(404).json(`No project with id: ${id} found`)
         } else {
-          response.status(200).json(`Project with id: ${id} has been deleted.`);
+          response.status(204).json(`Project with id: ${id} has been deleted.`);
         }
       })
       .catch(error => {
