@@ -152,12 +152,10 @@ app.delete('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params
   database('palettes')
     .where('project_id', id)
-    .select()
     .del()
     .then(res => {
       database('projects')
       .where('id', id)
-      .select()
       .del()
       .then(res => {
         if(!res) {
@@ -171,6 +169,30 @@ app.delete('/api/v1/projects/:id', (request, response) => {
       })
     })
 });
+
+app.delete('/api/v1/projects:id', (request, response) => {
+  const { id } = request.params;
+  database('palettes')
+    .where('project_id', id)
+    .select()
+    .del()
+    .then(res => {
+      database('projects')
+        .where('id', id)
+        .select()
+        .del()
+        .then(res => {
+          if(!res) {
+            response.status(404).json(`No project with id: ${id} found`)
+          } else {
+            response.status(204).json(`Project with id: ${id} has been deleted.`)
+          }
+        })
+    })
+    .catch(error => {
+      response.status(500).json({ error })
+    })
+})
 
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
