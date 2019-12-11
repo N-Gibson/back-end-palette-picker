@@ -151,11 +151,11 @@ app.patch('/api/v1/palettes/:id', (request, response) => {
 app.delete('/api/v1/projects/:id', (request, response) => {
   const { id } = request.params
   database('palettes')
-    .where({project_id: id})
+    .where('project_id', id)
     .del()
     .then(
   database('projects')
-    .where({id: id})
+    .where('id', id)
     .del()
     .then(project => {
       if (!project) {
