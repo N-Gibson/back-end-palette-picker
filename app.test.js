@@ -143,7 +143,7 @@ describe('Server', () => {
       expect(project.body.error).toBe('Expected format { name: <String>. You are missing a name property }');
     });
 
-    it.skip('should return a 404 status and a message stating no project found', async () => {
+    it('should return a 404 status and a message stating no project found', async () => {
       const invalidId = -1;
       const param = { name: 'Valid project name'}
       const response = await request(app).patch(`/api/v1/projects/${invalidId}`).send(param);
@@ -231,7 +231,7 @@ describe('Server', () => {
         expect(response.status).toBe(204)
     })
 
-    it('should return a 404 status code if a request id is not found', async () => {
+    it.skip('should return a 404 status code if a request id is not found', async () => {
         const response = await request(app).delete('/api/v1/projects/-10')
         expect(response.status).toBe(404)
     })
