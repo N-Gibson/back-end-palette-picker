@@ -148,71 +148,49 @@ app.patch('/api/v1/palettes/:id', (request, response) => {
   }
 });
 
-app.delete('api/v1/projects/:id', (request, response) => {
-  const { id } = request.params
-  database('palettes')
-    .where('project_id', id)
-    .del()
-    .then(res => {
-      database('projects')
-      .where('id', id)
-      .del()
-      .then(res => {
-        if(!res) {
-          response.status(404).json(`No project with id: ${id} found`)
-        } else {
-          response.status(204).json(`Project with id: ${id} has been deleted.`)
-        }
-      })
-      .catch(error => {
-        response.status(500).json({ error })
-      })
-    })
-});
-
-// app.delete('/api/v1/projects/:id', (request, response) => {
+// app.delete('api/v1/projects/:id', (request, response) => {
 //   const { id } = request.params
 //   database('palettes')
 //     .where('project_id', id)
 //     .del()
-//     .then(() =>
-//   database('projects')
-//     .where('id', id)
-//     .del()
-//     .then(project => {
-//       if (!project) {
-//         response.status(404).json(`No project with id: ${ id } found`);
-//       } else {
-//         response.status(204).json(`Project with id: ${ id } has been deleted.`);
-//       }
-//     }))
-//     .catch(error => {
-//       response.status(500).json({ error });
-//     });
-// });
-
-// app.delete('/api/v1/projects/:id', async (request, response) => {
-//   const { id } = request.params;
-
-//   database('palettes')
-//     .where('palette_id', id)
-//     .del()
-//     .then(response => {
+//     .then(res => {
 //       database('projects')
 //       .where('id', id)
 //       .del()
-//       .then(response => {
-//         if(!response) {
+//       .then(res => {
+//         if(!res) {
 //           response.status(404).json(`No project with id: ${id} found`)
 //         } else {
-//           response.status(204).json(`Project with id: ${id} has been deleted.`);
+//           response.status(204).json(`Project with id: ${id} has been deleted.`)
 //         }
 //       })
 //       .catch(error => {
-//         response.status(500).send({ error })
+//         response.status(500).json({ error })
 //       })
 //     })
-// })
+// });
+
+app.delete('/api/v1/projects/:id', (request, response) => {
+  const { id } = request.params
+  database('palettes')
+    .where('project_id', id)
+    .del()
+    .then(() => {
+  database('projects')
+    .where('id', id)
+    .del()
+    .then(project => {
+        if (!project) {
+          response.status(404).json(`No project with id: ${ id } found`);
+        } else {
+          response.status(204).json(`Project with id: ${ id } has been deleted.`);
+        }
+      })
+    })
+    .catch(error => {
+      response.status(500).json({ error });
+    });
+});
 
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
