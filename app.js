@@ -153,7 +153,7 @@ app.delete('/api/v1/projects/:id', (request, response) => {
   database('palettes')
     .where('project_id', id)
     .del()
-    .then(
+    .then(() =>
   database('projects')
     .where('id', id)
     .del()
