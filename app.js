@@ -149,7 +149,7 @@ app.patch('/api/v1/palettes/:id', (request, response) => {
 });
 
 app.delete('/api/v1/projects/:projectId', (request, response) => {
-  database('projects').where('projectId', request.params.projectId).select().del()
+  database('projects').where('project_id', request.params.projectId).select().del()
   .then(project => {
       if (project) {
       response.status(202).json(`Project ${request.params.projectId} deleted`);
