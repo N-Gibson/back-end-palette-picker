@@ -212,7 +212,7 @@ describe('Server', () => {
       const deletedPalettes = await database('palettes').select();
 
       expect(deletedPalettes.length).toEqual(2);
-    })
+    git })
 
     it('should return a 404 status code if there is no palette with the matching id and the corresponding error message', async () => {
       const invalidId = -1;
