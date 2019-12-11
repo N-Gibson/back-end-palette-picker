@@ -231,7 +231,7 @@ describe('Server', () => {
         expect(response.status).toBe(204)
     })
 
-    it('should return a 404 if a request id is bad', async () => {
+    it('should return a 404 status code if a request id is not found', async () => {
         const response = await request(app).delete('/api/v1/projects/-10')
         expect(response.status).toBe(404)
     })
