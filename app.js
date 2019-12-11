@@ -148,52 +148,14 @@ app.patch('/api/v1/palettes/:id', (request, response) => {
   }
 });
 
-
 app.delete('/api/v1/projects/:id', (request, response) => {
-  const { id } = request.params
-  database('palettes')
-  .where('project_id', id)
-  .del()
-  .then(() => {
-    database('projects')
-      .where('id', id)
-      .del()
-      .then(response => {
-        if(!response) {
-          response.status(404).json(`No project with id: ${id} found`)
-        } else {
-          response.status(204).json(`Project with id: ${id} has been deleted.`)
-        }
-      })
-  })
-  .catch(error => {
-    response.status(500).json({ error })
-  })
+  const { id } = request.params;
+  database('projects')
+    .where({ id })
+    .del()
+    .then(() => response.status(202).json({ message: `Successfully deleted project` }))
+    .catch((err) => response.status(500).json({ err }));
 });
-
-// app.delete('/api/v1/projects:id', (request, response) => {
-//   const { id } = request.params;
-//   database('palettes')
-//     .where('project_id', id)
-//     .select()
-//     .del()
-//     .then(res => {
-//       database('projects')
-//         .where('id', id)
-//         .select()
-//         .del()
-//         .then(res => {
-//           if(!res) {
-//             response.status(404).json(`No project with id: ${id} found`)
-//           } else {
-//             response.status(204).json(`Project with id: ${id} has been deleted.`)
-//           }
-//         })
-//     })
-//     .catch(error => {
-//       response.status(500).json({ error })
-//     })
-// })
 
 app.delete('/api/v1/palettes/:id', (request, response) => {
   const { id } = request.params;
