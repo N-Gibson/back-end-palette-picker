@@ -79,7 +79,7 @@ describe('Server', () => {
   });
 
   describe('POST /api/v1/projects', () => {
-    it.skip('should return a 201 status and add a new project to the database', async () => {
+    it('should return a 201 status and add a new project to the database', async () => {
       const newProject = { name: 'New Project' }
 
       const response = await request(app).post('/api/v1/projects').send(newProject);
@@ -100,7 +100,7 @@ describe('Server', () => {
   });
 
   describe('POST /api/v1/palettes', () => {
-    it.skip('should return a 201 status and add a new palette to the database', async () => {
+    it('should return a 201 status and add a new palette to the database', async () => {
       const newPalette = { project_id: 1,  name: 'New Palette', color1: '#123456', color2: '#987654', color3: '#345678', color4: '#876543', color5: '#102938'}
  
       const response = await request(app).post('/api/v1/palettes').send(newPalette);
@@ -121,7 +121,7 @@ describe('Server', () => {
   });
 
   describe('PATCH /api/v1/projects/:id', () => {
-    it.skip('should return a 202 status and return the modified project', async () => {
+    it('should return a 202 status and return the modified project', async () => {
       const prePatchProject = await database('projects').select().first();
 
       expect(prePatchProject.name).toEqual('Project Name 1')
@@ -154,7 +154,7 @@ describe('Server', () => {
   });
 
   describe('PATCH /api/v1/palettes/:id', () => {
-    it.skip('should return a 202 status and return the modified palette', async () => {
+    it('should return a 202 status and return the modified palette', async () => {
       const prePatchPalette = await database('palettes').select().first();
 
       expect(prePatchPalette.name).toEqual('Palette Name 1')
@@ -200,7 +200,7 @@ describe('Server', () => {
       expect(response.body).toEqual(`Palette ${paletteId} has been deleted`);
     });
 
-    it.skip('should reduce the size of the database if the deletion was successful', async () => {
+    it('should reduce the size of the database if the deletion was successful', async () => {
       const palettes = await database('palettes').select();
       const palette = palettes[0];
       const paletteId = palette.id;
@@ -212,7 +212,7 @@ describe('Server', () => {
       const deletedPalettes = await database('palettes').select();
 
       expect(deletedPalettes.length).toEqual(2);
-    git })
+    })
 
     it('should return a 404 status code if there is no palette with the matching id and the corresponding error message', async () => {
       const invalidId = -1;
@@ -225,13 +225,16 @@ describe('Server', () => {
   })
 
   describe('DELETE /projects/:id', () => {
-    it.skip('should return a 204 status code and remove project from database', async () => {
+    it('should return a 204 status code and remove project from database', async () => {
+        await database('palettes').select().first().del();
+        const contents = await database('projects').select()
         const deletedId = await database('projects').select().first().then(project => project.id)
         const response = await request(app).delete(`/api/v1/projects/${deletedId}`)
-        expect(response.status).toBe(204)
+
+        expect(response.status).toBe(202)
     })
 
-    it.skip('should return a 404 status code if a request id is not found', async () => {
+    it('should return a 404 status code if a request id is not found', async () => {
         const response = await request(app).delete('/api/v1/projects/-10')
         expect(response.status).toBe(404)
     })
